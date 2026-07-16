@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Assunsets — Your sunsets, saved. Coming August 1.</title>
+<meta name="description" content="A gallery app for people who stop and watch the sky. Save, tag, and revisit every sunset you've caught — organized by place and date. Launching August 1, 2026.">
+<meta name="keywords" content="sunset app, sunset gallery, photo app, sky photography">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Awesome Solutions & Software">
+<meta name="theme-color" content="#0a0908">
+<meta name="format-detection" content="telephone=no">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<!-- TODO: replace with your real production domain before launch -->
+<link rel="canonical" href="https://www.assunsets.com/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Assunsets">
+<meta property="og:title" content="Assunsets — Your sunsets, saved.">
+<meta property="og:description" content="A gallery app for sunset lovers. Save, tag, and revisit every sky you've caught. Launching August 1, 2026.">
+<meta property="og:url" content="https://www.assunsets.com/">
+<!-- TODO: upload a real 1200x630 image and point this at it -->
+<meta property="og:image" content="https://www.assunsets.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Assunsets — Your sunsets, saved.">
+<meta name="twitter:description" content="A gallery app for sunset lovers. Launching August 1, 2026.">
+<meta name="twitter:image" content="https://www.assunsets.com/og-image.jpg">
+
+<!-- Best-effort security headers. For real protection, set these as HTTP response
+     headers at your host (Cloudflare Pages / Netlify) — meta tags can't cover everything,
+     e.g. frame-ancestors / X-Frame-Options must be set server-side. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io; base-uri 'self'; form-action 'self' https://formspree.io;">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌅</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌅</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Non-render-blocking font load: only the weights actually used (was 6, now 5, with
+     unused Poppins 700 dropped and the missing Inter 700 the button needed, added). -->
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@800;900&family=Inter:wght@400;600;700&display=swap"
+      media="print" onload="this.media='all'; this.onload=null;">
+<noscript>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@800;900&family=Inter:wght@400;600;700&display=swap">
+</noscript>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Assunsets",
+  "url": "https://www.assunsets.com/",
+  "sameAs": ["https://instagram.com/2as_inc"],
+  "description": "A gallery app for sunset lovers, launching August 1, 2026."
+}
+</script>
+
+<style>
+  :root{
+    --bg:#0a0908;
+    --bg-soft:#121110;
+    --border:rgba(255,255,255,0.14);
+    --border-strong:rgba(255,255,255,0.28);
+    --text:#f5f0e8;
+    --text-dim:rgba(245,240,232,0.72);
+    --yellow:#f7b538;
+    --orange:#f06f20;
+    --red:#df3c2a;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    -webkit-text-size-adjust:100%;
+  }
+  .display{font-family:'Poppins', sans-serif; font-weight:900; letter-spacing:-0.02em;}
+  a{color:inherit; text-decoration:none;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *, *::before, *::after{
+      animation-duration:0.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:0.01ms !important;
+      scroll-behavior:auto !important;
+    }
+  }
+
+  /* ---------- ACCESSIBILITY UTILITIES ---------- */
+  .sr-only{
+    position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }
+  .skip-link{
+    position:absolute; left:12px; top:-60px;
+    background:var(--yellow); color:#141210; font-weight:700;
+    padding:10px 18px; border-radius:8px; z-index:200;
+    transition:top .2s ease;
+  }
+  .skip-link:focus{ top:12px; }
+  a:focus-visible, button:focus-visible, input:focus-visible{
+    outline:2px solid var(--yellow);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 6vw;
+    border-bottom:1px solid var(--border);
+    background:rgba(10,9,8,0.55);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+  .brand{display:flex; align-items:center; gap:12px;}
+  .arc-mark{width:34px; height:20px; position:relative;}
+  .arc-mark svg{width:100%; height:100%;}
+  .brand-name{font-family:'Poppins',sans-serif; font-weight:800; font-size:15px; letter-spacing:0.04em;}
+  .brand-name span{display:block; font-family:'Inter',sans-serif; font-weight:500; font-size:10px; letter-spacing:0.18em; color:var(--text-dim); margin-top:1px;}
+  .nav-cta{
+    border:1px solid var(--border-strong);
+    padding:9px 20px; border-radius:999px;
+    font-size:13px; font-weight:600; letter-spacing:0.02em;
+    transition:background .2s ease, border-color .2s ease;
+  }
+  .nav-cta:hover{background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.5);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex; flex-direction:column; justify-content:flex-end;
+    padding:0 6vw 8vh;
+    /* CSS-only sunset — no image download, no LCP penalty, scales perfectly at any
+       resolution. Replaces a multi-megabyte inline base64 JPEG that was here before. */
+    background:
+      linear-gradient(to bottom, rgba(10,9,8,0.10) 0%, rgba(10,9,8,0.32) 45%, rgba(10,9,8,0.95) 88%, var(--bg) 100%),
+      radial-gradient(ellipse 60% 45% at 50% 82%, rgba(247,181,56,0.65) 0%, rgba(247,181,56,0.28) 22%, rgba(240,111,32,0.14) 38%, transparent 60%),
+      linear-gradient(to bottom, #140f0c 0%, #2c1c14 20%, #55311c 38%, #8f4425 55%, #c94f2c 66%, #4a1f16 82%, var(--bg) 100%);
+    background-repeat:no-repeat;
+    border-bottom:1px solid var(--border);
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:10px;
+    font-size:13px; font-weight:600; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--orange);
+    margin-bottom:22px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:7px; height:7px; border-radius:50%;
+    background:var(--orange);
+    box-shadow:0 0 10px var(--orange);
+  }
+  h1.hero-title{
+    font-size:clamp(48px, 10vw, 116px);
+    line-height:0.95;
+    max-width:14ch;
+  }
+  .accent-bar{
+    width:clamp(140px, 30vw, 280px); height:6px; margin:26px 0 22px;
+    background:linear-gradient(90deg, var(--yellow), var(--orange), var(--red));
+    border-radius:3px;
+  }
+  .hero-sub{
+    font-size:clamp(15px, 2vw, 19px);
+    color:var(--text-dim);
+    max-width:46ch;
+    margin-bottom:40px;
+  }
+
+  /* countdown */
+  .countdown{
+    display:flex; gap:14px; flex-wrap:wrap;
+    margin-bottom:40px;
+  }
+  .countdown .unit{
+    border:1px solid var(--border);
+    background:rgba(255,255,255,0.03);
+    border-radius:14px;
+    padding:14px 20px;
+    min-width:78px;
+    text-align:center;
+  }
+  .countdown .num{font-family:'Poppins',sans-serif; font-weight:800; font-size:28px; display:block;}
+  .countdown .label{font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-dim); margin-top:4px; display:block;}
+
+  /* signup form */
+  .signup{
+    display:flex; gap:0; max-width:440px;
+    border:1px solid var(--border-strong);
+    border-radius:999px;
+    overflow:hidden;
+    background:rgba(255,255,255,0.04);
+    scroll-margin-top:100px;
+  }
+  .signup input{
+    flex:1; background:transparent; border:none; outline:none;
+    appearance:none; -webkit-appearance:none;
+    padding:16px 22px; color:var(--text); font-size:14px; font-family:'Inter',sans-serif;
+    min-width:0;
+  }
+  .signup input::placeholder{color:var(--text-dim);}
+  .signup button{
+    background:linear-gradient(90deg, var(--yellow), var(--orange));
+    border:none; color:#141210; font-weight:700; font-size:14px;
+    padding:0 26px; cursor:pointer;
+    appearance:none; -webkit-appearance:none;
+    transition:filter .2s ease;
+    font-family:'Inter',sans-serif;
+    white-space:nowrap;
+  }
+  .signup button:hover{filter:brightness(1.08);}
+  .signup button:disabled{cursor:not-allowed; filter:brightness(0.85);}
+  .hp-field{
+    position:absolute !important;
+    left:-9999px !important;
+    width:1px !important; height:1px !important;
+    overflow:hidden;
+  }
+  .form-note{font-size:12px; color:var(--text-dim); margin-top:12px;}
+
+  /* ---------- ABOUT ---------- */
+  .about{
+    padding:120px 6vw;
+    max-width:1200px; margin:0 auto;
+    display:grid; grid-template-columns:1fr 1fr; gap:60px;
+    border-bottom:1px solid var(--border);
+  }
+  .about h2{
+    font-size:clamp(28px,4vw,42px);
+    max-width:12ch;
+    margin-bottom:20px;
+  }
+  .about p{color:var(--text-dim); font-size:16px; max-width:44ch;}
+  .feature-list{display:flex; flex-direction:column; gap:0;}
+  .feature{
+    display:flex; align-items:flex-start; gap:18px;
+    padding:26px 0;
+    border-top:1px solid var(--border);
+  }
+  .feature:last-child{border-bottom:1px solid var(--border);}
+  .feature .icon{
+    width:38px; height:38px; flex-shrink:0;
+    border:1px solid var(--border-strong);
+    border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:17px;
+  }
+  .feature h3{font-size:15px; font-weight:600; margin-bottom:4px;}
+  .feature p{font-size:13.5px; color:var(--text-dim); max-width:36ch;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding:50px 6vw 40px;
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:20px;
+  }
+  .footer-links{display:flex; gap:26px; font-size:13px; color:var(--text-dim);}
+  .footer-links a:hover{color:var(--text);}
+  .footer-brand{font-size:12px; color:var(--text-dim); letter-spacing:0.05em;}
+
+  @media (max-width:760px){
+    .about{grid-template-columns:1fr;}
+    nav{padding:16px 5vw;}
+    .hero{padding:0 5vw 7vh;}
+  }
+  @media (max-width:420px){
+    .signup{flex-wrap:wrap; border-radius:20px;}
+    .signup input{width:100%;}
+    .signup button{width:100%; padding:14px; border-radius:0 0 18px 18px;}
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav>
+  <div class="brand">
+    <div class="arc-mark">
+      <svg viewBox="0 0 60 34" fill="none" aria-hidden="true">
+        <path d="M4 34a26 26 0 0 1 52 0" stroke="#f7b538" stroke-width="6"/>
+        <path d="M11 34a19 19 0 0 1 38 0" stroke="#f06f20" stroke-width="6"/>
+        <path d="M18 34a12 12 0 0 1 24 0" stroke="#df3c2a" stroke-width="6"/>
+      </svg>
+    </div>
+    <div class="brand-name">2AS<span>ASSUNSETS · SINCE 2022</span></div>
+  </div>
+  <a href="#signup" class="nav-cta">Notify me</a>
+</nav>
+
+<main id="main">
+  <section class="hero">
+    <div class="eyebrow">Assunsets · Gallery App</div>
+    <h1 class="hero-title display">Coming<br>Soon.</h1>
+    <div class="accent-bar"></div>
+    <p class="hero-sub">A gallery app built for people who stop what they're doing when the sky does something worth watching. Official launch is almost here.</p>
+
+    <p class="sr-only">Launching August 1, 2026.</p>
+    <div class="countdown" id="countdown" aria-hidden="true">
+      <div class="unit"><span class="num" id="cd-days">--</span><span class="label">Days</span></div>
+      <div class="unit"><span class="num" id="cd-hours">--</span><span class="label">Hours</span></div>
+      <div class="unit"><span class="num" id="cd-mins">--</span><span class="label">Mins</span></div>
+      <div class="unit"><span class="num" id="cd-secs">--</span><span class="label">Secs</span></div>
+    </div>
+
+    <!-- TODO: replace the action URL with a real endpoint (Formspree, Mailchimp, a
+         Cloudflare Worker, etc.) — right now submissions have nowhere real to land. -->
+    <form class="signup" id="signup" action="https://formspree.io/f/xvzezvpj" method="POST">
+      <label for="email-input" class="sr-only">Email address</label>
+      <input id="email-input" name="email" type="email" required autocomplete="email"
+             inputmode="email" spellcheck="false" placeholder="you@email.com">
+      <input type="text" name="company" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit" id="signup-btn">Notify me</button>
+    </form>
+    <p class="form-note" id="form-note" role="status" aria-live="polite">We'll email you once, on launch day. No spam.</p>
+  </section>
+
+  <section class="about">
+    <div>
+      <h2 class="display">Every sky, saved.</h2>
+      <p>Assunsets is a place to collect, organize, and revisit the sunsets you've caught — from your street, your travels, or a random Tuesday that turned the whole sky pink.</p>
+    </div>
+    <div class="feature-list">
+      <div class="feature">
+        <div class="icon" aria-hidden="true">🌇</div>
+        <div>
+          <h3>Personal sky gallery</h3>
+          <p>Every sunset you save is organized automatically by place and date.</p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="icon" aria-hidden="true">📍</div>
+        <div>
+          <h3>Location tagged</h3>
+          <p>See where your best skies happened, and go back for a better one.</p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="icon" aria-hidden="true">✨</div>
+        <div>
+          <h3>Built for one thing</h3>
+          <p>No feed, no noise — just your sunsets, done right.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-brand">© 2022–2026 Assunsets, by Awesome Solutions &amp; Software. All rights reserved.</div>
+  <div class="footer-links">
+    <a href="https://instagram.com/2as_inc" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <a href="mailto:hello@asunsets.com">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // Countdown to launch — Aug 1, 2026, 00:00 local time
+  var launchDate = new Date("2026-08-01T00:00:00");
+  var els = {
+    days: document.getElementById('cd-days'),
+    hours: document.getElementById('cd-hours'),
+    mins: document.getElementById('cd-mins'),
+    secs: document.getElementById('cd-secs')
+  };
+  function tick(){
+    var diff = Math.max(0, launchDate - new Date());
+    els.days.textContent  = String(Math.floor(diff / 86400000)).padStart(2, '0');
+    els.hours.textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+    els.mins.textContent  = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+    els.secs.textContent  = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // Signup form: honeypot spam trap, disabled-during-submit to survive traffic
+  // bursts without duplicate signups, graceful fallback if the endpoint fails.
+  var form = document.getElementById('signup');
+  var note = document.getElementById('form-note');
+  var btn  = document.getElementById('signup-btn');
+  var STORAGE_KEY = 'assunsets_signed_up';
+
+  try {
+    if (localStorage.getItem(STORAGE_KEY)) {
+      note.textContent = "You're already on the list. See you August 1 🌅";
+    }
+  } catch (e) { /* localStorage unavailable — non-fatal */ }
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    if (btn.disabled) return;
+
+    var email = form.email.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      note.textContent = "That doesn't look like a valid email — mind checking it?";
+      return;
+    }
+    if (form.company.value) return; // honeypot tripped — fail silently, no error shown to bots
+
+    btn.disabled = true;
+    btn.textContent = "Sending…";
+
+    try {
+      var res = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { "Accept": "application/json" }
+      });
+      if (!res.ok) throw new Error("Request failed");
+      note.textContent = "You're on the list. See you August 1st 🌅";
+      try { localStorage.setItem(STORAGE_KEY, "1"); } catch (e) {}
+      form.reset();
+    } catch (err) {
+      note.textContent = "Something went wrong on our end — please try again in a moment.";
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Notify me";
+    }
+  });
+</script>
+
+</body>
+</html>
